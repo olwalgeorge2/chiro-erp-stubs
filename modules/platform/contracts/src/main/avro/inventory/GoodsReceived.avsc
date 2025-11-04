@@ -1,0 +1,35 @@
+{
+  "type": "record",
+  "name": "GoodsReceived",
+  "namespace": "com.chiro.erp.inventory.events",
+  "fields": [
+    {
+      "name": "eventId",
+      "type": "string"
+    },
+    {
+      "name": "occurredAt",
+      "type": "string"
+    },
+    {
+      "name": "materialId",
+      "type": "string"
+    },
+    {
+      "name": "plant",
+      "type": "string"
+    },
+    {
+      "name": "sloc",
+      "type": "string"
+    },
+    {
+      "name": "qty",
+      "type": "double"
+    },
+    {
+      "name": "uom",
+      "type": "string"
+    }
+  ]
+}

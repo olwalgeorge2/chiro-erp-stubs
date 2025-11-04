@@ -1,0 +1,4 @@
+quarkus:
+  log:
+    category:
+      "com.chiro": DEBUG

@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "OrderPlaced",
+  "namespace": "com.chiro.erp.commerce.events",
+  "fields": [
+    {
+      "name": "eventId",
+      "type": "string"
+    },
+    {
+      "name": "occurredAt",
+      "type": "string"
+    },
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "customerId",
+      "type": "string"
+    }
+  ]
+}
