@@ -4,9 +4,9 @@ dependencies {
     api(project(":modules:platform:shared-kernel"))
     
     // JWT and security
-    api("io.jsonwebtoken:jjwt-api:0.12.3")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
+    api(libs.jwt.api)
+    runtimeOnly(libs.jwt.impl)
+    runtimeOnly(libs.jwt.jackson)
 }
 
 group = "chiro.erp.platform"

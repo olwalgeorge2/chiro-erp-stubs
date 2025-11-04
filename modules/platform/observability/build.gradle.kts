@@ -4,8 +4,8 @@ dependencies {
     api(project(":modules:platform:shared-kernel"))
     
     // Micrometer
-    api("io.micrometer:micrometer-core:1.12.2")
-    api("io.micrometer:micrometer-registry-prometheus:1.12.2")
+    api(libs.micrometer.core)
+    api(libs.micrometer.prometheus)
 }
 
 group = "chiro.erp.platform"

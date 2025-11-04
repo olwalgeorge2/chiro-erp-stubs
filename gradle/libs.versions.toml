@@ -1,0 +1,145 @@
+[versions]
+# Core frameworks
+kotlin = "2.2.20"
+quarkus = "3.29.0"
+
+# Build plugins
+ktlint-plugin = "12.1.2"
+avro-plugin = "1.9.1"
+
+# Platform libraries
+jackson = "2.16.1"
+jboss-logging = "3.5.3.Final"
+kafka = "3.6.1"
+confluent = "7.5.0"
+avro = "1.11.3"
+micrometer = "1.12.2"
+jwt = "0.12.3"
+
+# Testing
+junit = "5.10.1"
+mockk = "1.13.8"
+assertj = "3.24.2"
+testcontainers = "1.19.3"
+
+[libraries]
+# Kotlin
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+
+# Quarkus Core
+quarkus-bom = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
+quarkus-kotlin = { module = "io.quarkus:quarkus-kotlin" }
+quarkus-arc = { module = "io.quarkus:quarkus-arc" }
+
+# Quarkus REST (for web services)
+quarkus-rest = { module = "io.quarkus:quarkus-rest" }
+quarkus-rest-jackson = { module = "io.quarkus:quarkus-rest-jackson" }
+
+# Quarkus Data (for services with persistence)
+quarkus-hibernate-orm = { module = "io.quarkus:quarkus-hibernate-orm-panache-kotlin" }
+quarkus-jdbc-postgresql = { module = "io.quarkus:quarkus-jdbc-postgresql" }
+
+# Quarkus Messaging (for event-driven services)
+quarkus-kafka = { module = "io.quarkus:quarkus-messaging-kafka" }
+quarkus-confluent-avro = { module = "io.quarkus:quarkus-confluent-registry-avro" }
+
+# Quarkus Observability
+quarkus-health = { module = "io.quarkus:quarkus-smallrye-health" }
+
+# Quarkus Testing
+quarkus-junit5 = { module = "io.quarkus:quarkus-junit5" }
+rest-assured = { module = "io.rest-assured:rest-assured" }
+
+# Platform - Jackson
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+
+# Platform - Kafka
+kafka-clients = { module = "org.apache.kafka:kafka-clients", version.ref = "kafka" }
+kafka-avro-serializer = { module = "io.confluent:kafka-avro-serializer", version.ref = "confluent" }
+
+# Platform - Avro
+avro = { module = "org.apache.avro:avro", version.ref = "avro" }
+
+# Platform - Observability
+micrometer-core = { module = "io.micrometer:micrometer-core", version.ref = "micrometer" }
+micrometer-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
+
+# Platform - Security
+jwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jwt" }
+jwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jwt" }
+jwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jwt" }
+
+# Logging
+jboss-logging = { module = "org.jboss.logging:jboss-logging", version.ref = "jboss-logging" }
+
+# Testing
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+testcontainers-kafka = { module = "org.testcontainers:kafka", version.ref = "testcontainers" }
+
+[bundles]
+# Bundle for REST-based microservices (web + database)
+quarkus-web-service = [
+    "quarkus-kotlin",
+    "quarkus-arc",
+    "quarkus-rest",
+    "quarkus-rest-jackson",
+    "quarkus-health",
+    "quarkus-hibernate-orm",
+    "quarkus-jdbc-postgresql"
+]
+
+# Bundle for event-driven microservices (messaging only)
+quarkus-messaging-service = [
+    "quarkus-kotlin",
+    "quarkus-arc",
+    "quarkus-health",
+    "quarkus-kafka",
+    "quarkus-confluent-avro"
+]
+
+# Bundle for hybrid microservices (web + messaging + database)
+quarkus-hybrid-service = [
+    "quarkus-kotlin",
+    "quarkus-arc",
+    "quarkus-rest",
+    "quarkus-rest-jackson",
+    "quarkus-health",
+    "quarkus-hibernate-orm",
+    "quarkus-jdbc-postgresql",
+    "quarkus-kafka",
+    "quarkus-confluent-avro"
+]
+
+# Jackson bundle
+jackson = ["jackson-databind", "jackson-datatype-jsr310", "jackson-module-kotlin"]
+
+# Testing bundle for Quarkus services
+quarkus-testing = [
+    "quarkus-junit5",
+    "rest-assured",
+    "testcontainers-postgresql",
+    "testcontainers-kafka"
+]
+
+# Common testing bundle
+testing-common = [
+    "kotlin-test",
+    "junit-jupiter",
+    "mockk",
+    "assertj-core"
+]
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+quarkus = { id = "io.quarkus", version.ref = "quarkus" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-plugin" }
+avro = { id = "com.github.davidmc24.gradle.plugin.avro", version.ref = "avro-plugin" }

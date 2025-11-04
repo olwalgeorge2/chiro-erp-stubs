@@ -2,12 +2,10 @@
 
 dependencies {
     // Jackson for JSON serialization
-    api("com.fasterxml.jackson.core:jackson-databind:2.16.1")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1")
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
+    api(libs.bundles.jackson)
     
     // Logging
-    api("org.jboss.logging:jboss-logging:3.5.3.Final")
+    api(libs.jboss.logging)
 }
 
 group = "chiro.erp.platform"

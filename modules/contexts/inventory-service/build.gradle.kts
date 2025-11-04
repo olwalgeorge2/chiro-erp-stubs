@@ -1,12 +1,16 @@
-// Inventory Service - Full Quarkus application
+// Inventory Service - Web Quarkus application (REST + Database)
 
 dependencies {
-    // Platform modules
+    // Platform modules - selective for web service
     implementation(project(":modules:platform:shared-kernel"))
-    implementation(project(":modules:platform:messaging"))
     implementation(project(":modules:platform:security"))
     implementation(project(":modules:platform:observability"))
-    implementation(project(":modules:platform:contracts"))
+    
+    // Quarkus web service bundle (REST + Database, no messaging)
+    implementation(libs.bundles.quarkus.web.service)
+    
+    // Testing
+    testImplementation(libs.bundles.quarkus.testing)
 }
 
 group = "chiro.erp.contexts"

@@ -1,12 +1,12 @@
 // Event contracts using Avro schemas
 
 plugins {
-    id("com.github.davidmc24.gradle.plugin.avro")
+    alias(libs.plugins.avro)
 }
 
 dependencies {
     // Avro
-    api("org.apache.avro:avro:1.11.3")
+    api(libs.avro)
 }
 
 // Configure Avro plugin to generate from .avsc files

@@ -1,10 +1,10 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.2.20" apply false
-    id("org.jetbrains.kotlin.plugin.allopen") version "2.2.20" apply false
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20" apply false
-    id("io.quarkus") apply false
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.2" apply false
-    id("com.github.davidmc24.gradle.plugin.avro") version "1.9.1" apply false
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.allopen) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.quarkus) apply false
+    alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.avro) apply false
 }
 
 allprojects {
@@ -19,59 +19,50 @@ allprojects {
 }
 
 subprojects {
+    // Skip configuration for any build or intermediate directories
+    if (project.name == "build" || project.name == "intermediates") {
+        return@subprojects
+    }
+    
     // Apply Java plugin first before Kotlin to ensure dependency configurations exist
     pluginManager.apply("java-library")
-    pluginManager.apply("org.jetbrains.kotlin.jvm")
-    pluginManager.apply("org.jetbrains.kotlin.plugin.allopen")
-    pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
+    apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     
     // Only apply Quarkus to service modules, not platform modules
     if (project.path.startsWith(":modules:contexts:")) {
-        pluginManager.apply("io.quarkus")
+        apply(plugin = "io.quarkus")
     }
     
-    pluginManager.apply("org.jlleitschuh.gradle.ktlint")
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
     
-    afterEvaluate {
-        dependencies {
-            val quarkusPlatformGroupId: String by project
-            val quarkusPlatformArtifactId: String by project
-            val quarkusPlatformVersion: String by project
+    // Apply dependencies directly without afterEvaluate for Gradle 9.0 compatibility
+    dependencies {
+        // Kotlin standard library - common for all modules
+        add("implementation", rootProject.libs.kotlin.stdlib)
+        add("implementation", rootProject.libs.kotlin.reflect)
+        
+        // Quarkus BOM and base dependencies - only for service modules
+        if (project.path.startsWith(":modules:contexts:")) {
+            add("implementation", platform(rootProject.libs.quarkus.bom))
             
-            // Kotlin standard library
-            add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-            add("implementation", "org.jetbrains.kotlin:kotlin-reflect")
+            // Base Quarkus dependencies applied to all services
+            // Individual services can add specific bundles in their build.gradle.kts
+            add("implementation", rootProject.libs.quarkus.kotlin)
+            add("implementation", rootProject.libs.quarkus.arc)
+            add("implementation", rootProject.libs.quarkus.health)
             
-            // Quarkus BOM - only for service modules
-            if (project.path.startsWith(":modules:contexts:")) {
-                add("implementation", enforcedPlatform("$quarkusPlatformGroupId:$quarkusPlatformArtifactId:$quarkusPlatformVersion"))
-                add("implementation", "io.quarkus:quarkus-kotlin")
-                add("implementation", "io.quarkus:quarkus-arc")
-                
-                // Common Quarkus dependencies for all services
-                add("implementation", "io.quarkus:quarkus-rest")
-                add("implementation", "io.quarkus:quarkus-rest-jackson")
-                add("implementation", "io.quarkus:quarkus-smallrye-health")
-                add("implementation", "io.quarkus:quarkus-hibernate-orm-panache-kotlin")
-                add("implementation", "io.quarkus:quarkus-jdbc-postgresql")
-                
-                // Kafka Messaging
-                add("implementation", "io.quarkus:quarkus-messaging-kafka")
-                add("implementation", "io.quarkus:quarkus-confluent-registry-avro")
-                
-                // Testing
-                add("testImplementation", "io.quarkus:quarkus-junit5")
-                add("testImplementation", "io.rest-assured:rest-assured")
-                add("testImplementation", "org.testcontainers:postgresql:1.19.3")
-                add("testImplementation", "org.testcontainers:kafka:1.19.3")
-            }
-            
-            // Common testing dependencies
-            add("testImplementation", "org.jetbrains.kotlin:kotlin-test-junit5")
-            add("testImplementation", "org.junit.jupiter:junit-jupiter:5.10.1")
-            add("testImplementation", "io.mockk:mockk:1.13.8")
-            add("testImplementation", "org.assertj:assertj-core:3.24.2")
+            // Quarkus testing dependencies
+            add("testImplementation", rootProject.libs.quarkus.junit5)
+            add("testImplementation", rootProject.libs.rest.assured)
         }
+        
+        // Common testing dependencies for all modules
+        add("testImplementation", rootProject.libs.kotlin.test)
+        add("testImplementation", rootProject.libs.junit.jupiter)
+        add("testImplementation", rootProject.libs.mockk)
+        add("testImplementation", rootProject.libs.assertj.core)
     }
     
     tasks.withType<Test> {

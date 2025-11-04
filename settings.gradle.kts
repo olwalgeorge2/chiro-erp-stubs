@@ -1,0 +1,32 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        mavenLocal()
+    }
+}
+
+rootProject.name = "chiro-erp"
+
+// Enable version catalog
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+// Platform modules (shared infrastructure)
+include("modules:platform:contracts")
+include("modules:platform:messaging")
+include("modules:platform:observability")
+include("modules:platform:security")
+include("modules:platform:shared-kernel")
+include("modules:platform:testkit")
+
+// Context modules (bounded contexts / services)
+include("modules:contexts:bi-ingestion-service")
+include("modules:contexts:commerce-service")
+include("modules:contexts:comms-hub-service")
+include("modules:contexts:customer-relation-service")
+include("modules:contexts:financial-acl-service")
+include("modules:contexts:inventory-service")
+include("modules:contexts:mfg-execution-service")
+include("modules:contexts:operations-service")
+include("modules:contexts:procurement-service")
+include("modules:contexts:tenancy-identity-service")
